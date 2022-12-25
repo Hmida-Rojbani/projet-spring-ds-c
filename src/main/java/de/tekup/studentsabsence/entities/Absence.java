@@ -30,6 +30,7 @@ public class Absence implements Serializable {
    //TODO Complete Relations with other entities
     // OneToOne avec subject
     @OneToOne
+    @JoinColumn(name = "subject_id")
     @NotNull(message = "Subject is required")
     private Subject subject ;
     // ManyToOne avec student

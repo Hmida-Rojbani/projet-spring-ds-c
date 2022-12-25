@@ -35,7 +35,7 @@ public class Group {
     // ManyToMany avec subject
     @ManyToMany
     @JoinTable(
-            name = "course_like",
+            name = "GroupSubject",
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<Subject> subjects;

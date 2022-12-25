@@ -115,7 +115,7 @@ public class Student implements Serializable {
     }
 
     //TODO Complete Relations with other entities
-    @OneToOne
+    @OneToOne(mappedBy ="student")
     private Image image;
 
     //OnToMany avec Absence
