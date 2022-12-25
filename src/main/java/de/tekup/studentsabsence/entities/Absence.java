@@ -27,7 +27,32 @@ public class Absence implements Serializable {
     @NotNull(message = "Hours is required")
     @Positive(message = "Should be positive")
     private float hours;
-   //TODO Complete Relations with other entities
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+    //TODO Complete Relations with other entities
+
+    //OneToOne avec subject
+   @OneToOne
+   @NotNull(message = "Subject is required")
+   private Subject subject ;
+
+    //ManyToOne avec student
+    @ManyToOne
+    private Student student;
 
 }

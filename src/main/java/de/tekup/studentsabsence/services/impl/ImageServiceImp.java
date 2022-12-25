@@ -18,8 +18,11 @@ public class ImageServiceImp implements ImageService {
 
     //TODO Complete this method
     @Override
+
     public Image getImage(String id) {
-        return null;
+
+        return imageRepository.findById(id).orElse(null);
+
     }
 
     @Override
@@ -30,4 +33,5 @@ public class ImageServiceImp implements ImageService {
         Image img = new Image(null, fileName, fileType, data);
         return imageRepository.save(img);
     }
+
 }

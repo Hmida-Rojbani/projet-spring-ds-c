@@ -34,15 +34,25 @@ public class StudentServiceImp implements StudentService {
 
     }
 
-    //TODO Complete this method
-    @Override
-    public Student updateStudent(Student student) {
-        return null;
-    }
 
     //TODO Complete this method
     @Override
+    public Student updateStudent(Student student) {
+        if (!studentRepository.existsById((student.getSid()))) {
+            throw new NoSuchElementException("No Student With ID: " + student.getSid());
+
+    }return studentRepository.save(student);
+}
+    //TODO Complete this method
+    @Override
     public Student deleteStudent(Long sid) {
+        Student student = getStudentBySid(sid);
+        studentRepository.delete(student);
+        return student;
+    }
+
+    @Override
+    public Student getStudentByGroupId(long id) {
         return null;
     }
 }

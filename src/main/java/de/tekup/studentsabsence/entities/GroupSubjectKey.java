@@ -16,4 +16,5 @@ public class GroupSubjectKey implements Serializable {
     private Long groupId ;
     @Column(name = "subject_id")
     private Long subjectId;
+
 }

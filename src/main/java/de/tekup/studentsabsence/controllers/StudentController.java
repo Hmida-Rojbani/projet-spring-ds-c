@@ -28,6 +28,7 @@ public class StudentController {
     private final GroupService groupService;
     private final ImageService imageService;
 
+
     @GetMapping({"", "/"})
     public String index(Model model) {
         List<Student> students = studentService.getAllStudents();
@@ -48,7 +49,7 @@ public class StudentController {
             model.addAttribute("groups", groupService.getAllGroups());
             return "students/add";
         }
-
+        System.out.println(" student " + student.toString());
         studentService.addStudent(student);
         return "redirect:/students";
     }
@@ -91,8 +92,19 @@ public class StudentController {
 
     @PostMapping("/{sid}/add-image")
     //TODO complete the parameters of this method
-    public String addImage() {
+    public String addImage(@PathVariable Long sid, MultipartFile image) {
         //TODO complete the body of this method
+        Student student = studentService.getStudentBySid(sid);
+        try {
+            Image img = imageService.addImage(image);
+            System.out.println(" Image " + img.toString());
+            student.setImage(img);
+            Student stu= studentService.updateStudent(student);
+            //System.out.println(" Stu " + stu.toString());
+        }catch (Exception e){
+            System.out.println(" Error " + e.toString());
+            return "students/add-image";
+        }
         return "redirect:/students";
     }
 
@@ -100,7 +112,7 @@ public class StudentController {
     public void getStudentPhoto(HttpServletResponse response, @PathVariable("sid") long sid) throws Exception {
         Student student = studentService.getStudentBySid(sid);
         Image image = student.getImage();
-
+        System.out.println(image.toString());
         if(image != null) {
             response.setContentType(image.getFileType());
             InputStream inputStream = new ByteArrayInputStream(image.getData());
