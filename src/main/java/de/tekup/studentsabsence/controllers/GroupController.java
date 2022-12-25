@@ -1,9 +1,7 @@
 package de.tekup.studentsabsence.controllers;
 
 
-import de.tekup.studentsabsence.entities.Absence;
-import de.tekup.studentsabsence.entities.Group;
-import de.tekup.studentsabsence.entities.Student;
+import de.tekup.studentsabsence.entities.*;
 import de.tekup.studentsabsence.enums.LevelEnum;
 import de.tekup.studentsabsence.enums.SpecialityEnum;
 import de.tekup.studentsabsence.holders.GroupSubjectHolder;
@@ -18,7 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/groups")
@@ -85,10 +83,25 @@ public class GroupController {
     public String show(@PathVariable long id, Model model) {
         Group group = groupService.getGroupById(id);
 
+        List<GroupSubject> groupSubjectList = groupSubjectService.getSubjectsByGroupId(id);
+        Map<Subject,Float> mapSubTauxDabscence = new HashMap<>();
+        for (GroupSubject groupSubject :groupSubjectList){
+            float res = absenceService.hoursCountByGroupAndSubject(groupSubject.getGroup().getId(), groupSubject.getSubject().getId());
+            mapSubTauxDabscence.put(groupSubject.getSubject(), res);
+        }
+        List<Map.Entry<Subject, Float>> nlist;
+        nlist = new ArrayList<>(mapSubTauxDabscence.entrySet());
+        nlist.sort(Map.Entry.comparingByValue());
+         Subject highstSubjectAbscence = nlist.get(nlist.size()-1).getKey();
+         Subject lowestSubjectAbscence = nlist.get(0).getKey();
+
         model.addAttribute("group", group);
         model.addAttribute("groupSubjects",groupSubjectService.getSubjectsByGroupId(id));
         model.addAttribute("students",group.getStudents());
         model.addAttribute("absenceService", absenceService);
+
+        model.addAttribute("highstSubjectAbscence",highstSubjectAbscence);
+        model.addAttribute("lowestSubjectAbscence", lowestSubjectAbscence);
 
         group.getStudents().forEach(student -> {
 
@@ -140,7 +153,58 @@ public class GroupController {
     @PostMapping("/{id}/add-absences")
     public String addAbsence(@PathVariable long id, @Valid Absence absence, BindingResult bindingResult, @RequestParam(value = "students", required = false) List<Student> students, Model model) {
         //TODO Complete the body of this method
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("group",groupService.getGroupById(id));
+            model.addAttribute("absence",absenceService.getAllAbsencesByGroupId(id));
+            return "groups/add-absences";
+        }
+        Group group = groupService.getGroupById(id);
+
+        for (Student student : students){
+            List<Absence> absenceList = new ArrayList<>();
+
+            Absence abs = new Absence();
+                    abs.setStudent(student);
+                    abs.setHours(absence.getHours());
+                    abs.setSubject(absence.getSubject());
+                    abs.setStartDate(absence.getStartDate());
+                    absenceService.addAbsence(abs);
+            absenceList = student.getAbsences();
+            absenceList.add(abs);
+            student.setAbsences(absenceList);
+        }
+        group.setStudents(students);
         return "redirect:/groups/"+id+"/add-absences";
+    }
+    @GetMapping("/{gid}/getTheHighestSubjectAbs")
+    @ResponseBody
+    public Subject getTheHighestSubjectAbs(@PathVariable Long gid ){
+        List<GroupSubject> groupSubjectList = groupSubjectService.getSubjectsByGroupId(gid);
+        Map<Subject,Float> mapSubTauxDabscence = new HashMap<>();
+        for (GroupSubject groupSubject :groupSubjectList){
+           float res = absenceService.hoursCountByGroupAndSubject(groupSubject.getGroup().getId(), groupSubject.getSubject().getId());
+            mapSubTauxDabscence.put(groupSubject.getSubject(), res);
+        }
+        List<Map.Entry<Subject, Float>> nlist;
+        nlist = new ArrayList<>(mapSubTauxDabscence.entrySet());
+        nlist.sort(Map.Entry.comparingByValue());
+        return nlist.get(nlist.size()-1).getKey();
+    }
+
+    @GetMapping("/{gid}/getTheLowestSubjectAbs")
+    @ResponseBody
+    public Subject getTheLowestSubjectAbs(@PathVariable Long gid){
+        List<GroupSubject> groupSubjectList = groupSubjectService.getSubjectsByGroupId(gid);
+
+        Map<Subject,Float> mapSubTauxDabscence = new HashMap<>();
+        for (GroupSubject groupSubject :groupSubjectList){
+            float res = absenceService.hoursCountByGroupAndSubject(groupSubject.getGroup().getId(), groupSubject.getSubject().getId());
+            mapSubTauxDabscence.put(groupSubject.getSubject(), res);
+        }
+        List<Map.Entry<Subject, Float>> nlist;
+        nlist = new ArrayList<>(mapSubTauxDabscence.entrySet());
+        nlist.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+        return nlist.get(nlist.size()-1).getKey();
     }
 
 }

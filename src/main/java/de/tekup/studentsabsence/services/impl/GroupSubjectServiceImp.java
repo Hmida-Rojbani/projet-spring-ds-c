@@ -7,6 +7,7 @@ import de.tekup.studentsabsence.entities.Subject;
 import de.tekup.studentsabsence.repositories.GroupSubjectRepository;
 import de.tekup.studentsabsence.services.GroupService;
 import de.tekup.studentsabsence.services.GroupSubjectService;
+import de.tekup.studentsabsence.services.SubjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.NoSuchElementException;
 public class GroupSubjectServiceImp implements GroupSubjectService {
     private final GroupSubjectRepository groupSubjectRepository;
     private final GroupService groupService;
+    private final SubjectService subjectService;
 
     @Override
     public void addSubjectToGroup(Group group, Subject subject, float hours) {
@@ -39,9 +41,15 @@ public class GroupSubjectServiceImp implements GroupSubjectService {
     @Override
     public void deleteSubjectFromGroup(Long gid, Long sid) {
         //TODO find a groupSubject by Group Id and Subject Id
-        GroupSubject groupSubject = null;
-
+        GroupSubject groupSubject =groupSubjectRepository.findByGroup_idAndSubject_Id(gid, sid);
         groupSubjectRepository.delete(groupSubject);
     }
+
+    @Override
+    public List<GroupSubject> getGroupSubjectBySubjectId(Long id) {
+        Subject subject = subjectService.getSubjectById(id);
+        return new ArrayList<>(groupSubjectRepository.findAllBySubject(subject));
+    }
+
 
 }

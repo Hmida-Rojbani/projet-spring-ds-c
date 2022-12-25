@@ -103,6 +103,29 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header card-header-text card-header-primary">
+                                    <div class="card-text">
+                                        <h4 class="card-title">Statistics</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body table-responsive">
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <th class="text-primary">The Highest Subject Abscence </th>
+                                            <th class="text-primary">The Lowest Subject Abscence </th>
+                                        </tr>
+                                        <tr>
+                                            <td th:text="${highstSubjectAbscence.name}"></td>
+                                            <td th:text="${lowestSubjectAbscence.name}"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
