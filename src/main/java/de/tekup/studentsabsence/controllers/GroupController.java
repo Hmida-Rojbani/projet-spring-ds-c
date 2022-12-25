@@ -7,11 +7,13 @@ import de.tekup.studentsabsence.entities.Student;
 import de.tekup.studentsabsence.enums.LevelEnum;
 import de.tekup.studentsabsence.enums.SpecialityEnum;
 import de.tekup.studentsabsence.holders.GroupSubjectHolder;
+import de.tekup.studentsabsence.repositories.StudentRepository;
 import de.tekup.studentsabsence.services.AbsenceService;
 import de.tekup.studentsabsence.services.GroupService;
 import de.tekup.studentsabsence.services.GroupSubjectService;
 import de.tekup.studentsabsence.services.SubjectService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +30,7 @@ public class GroupController {
     private final SubjectService subjectService;
     private final GroupSubjectService groupSubjectService;
     private final AbsenceService absenceService;
+    private final StudentRepository studentRepository;
 
     @GetMapping({"", "/"})
     public String index(Model model) {
@@ -64,6 +67,7 @@ public class GroupController {
         return "groups/update";
     }
 
+
     @PostMapping("/{id}/update")
     public String update(@PathVariable long id, @Valid Group group, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
@@ -84,14 +88,21 @@ public class GroupController {
     @GetMapping("/{id}/show")
     public String show(@PathVariable long id, Model model) {
         Group group = groupService.getGroupById(id);
-
+        List<Student> students = groupService.getStudentsForGroup(id);
         model.addAttribute("group", group);
         model.addAttribute("groupSubjects",groupSubjectService.getSubjectsByGroupId(id));
-        model.addAttribute("students",group.getStudents());
+        model.addAttribute("student",students);
+        System.out.println(students);
+        students.forEach(st->{
+            System.out.println(st);
+        });
+
+
+
         model.addAttribute("absenceService", absenceService);
 
         group.getStudents().forEach(student -> {
-
+            System.out.println("List of students : " +student);
         });
 
         return "groups/show";
@@ -128,11 +139,13 @@ public class GroupController {
     @GetMapping("/{id}/add-absences")
     public String addAbsenceView(@PathVariable long id, Model model) {
         Group group = groupService.getGroupById(id);
-
+        List<Student> students = groupService.getStudentsForGroup(id);
         model.addAttribute("group", group);
         model.addAttribute("absence", new Absence());
+        model.addAttribute("students", students);
+        System.out.println(group.getStudents());
         model.addAttribute("groupSubjects", groupSubjectService.getSubjectsByGroupId(id));
-        model.addAttribute("students", group.getStudents());
+
 
         return "groups/add-absences";
     }
@@ -140,6 +153,18 @@ public class GroupController {
     @PostMapping("/{id}/add-absences")
     public String addAbsence(@PathVariable long id, @Valid Absence absence, BindingResult bindingResult, @RequestParam(value = "students", required = false) List<Student> students, Model model) {
         //TODO Complete the body of this method
+        Group group=groupService.getGroupById(id);
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("group",group);
+            model.addAttribute("groupSubjects",groupSubjectService.getSubjectsByGroupId(id));
+            model.addAttribute("students",students);
+            return "group/add-absences";
+        }
+        for (Student student:students){
+            absence.setStudent(student);
+            absenceService.addAbsence(absence);
+        }
         return "redirect:/groups/"+id+"/add-absences";
     }
 

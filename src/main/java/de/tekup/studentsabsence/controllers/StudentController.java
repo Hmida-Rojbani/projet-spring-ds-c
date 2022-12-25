@@ -2,6 +2,7 @@ package de.tekup.studentsabsence.controllers;
 
 import de.tekup.studentsabsence.entities.Image;
 import de.tekup.studentsabsence.entities.Student;
+import de.tekup.studentsabsence.repositories.StudentRepository;
 import de.tekup.studentsabsence.services.GroupService;
 import de.tekup.studentsabsence.services.ImageService;
 import de.tekup.studentsabsence.services.StudentService;
@@ -27,6 +28,7 @@ public class StudentController {
     private final StudentService studentService;
     private final GroupService groupService;
     private final ImageService imageService;
+    private final StudentRepository studentRepository;
 
     @GetMapping({"", "/"})
     public String index(Model model) {
@@ -41,6 +43,8 @@ public class StudentController {
         model.addAttribute("groups", groupService.getAllGroups());
         return "students/add";
     }
+
+
 
     @PostMapping("/add")
     public String add(@Valid Student student, BindingResult bindingResult, Model model) {
@@ -91,8 +95,11 @@ public class StudentController {
 
     @PostMapping("/{sid}/add-image")
     //TODO complete the parameters of this method
-    public String addImage() {
+    public String addImage(@PathVariable Long sid, MultipartFile image ) throws IOException {
         //TODO complete the body of this method
+       Student student=studentService.getStudentBySid(sid);
+       student.setImage(imageService.addImage(image));
+       studentService.updateStudent(student);
         return "redirect:/students";
     }
 
