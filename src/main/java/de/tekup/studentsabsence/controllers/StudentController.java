@@ -6,9 +6,11 @@ import de.tekup.studentsabsence.services.GroupService;
 import de.tekup.studentsabsence.services.ImageService;
 import de.tekup.studentsabsence.services.StudentService;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +52,7 @@ public class StudentController {
         }
 
         studentService.addStudent(student);
+
         return "redirect:/students";
     }
 
@@ -89,10 +92,26 @@ public class StudentController {
         return "students/add-image";
     }
 
+
     @PostMapping("/{sid}/add-image")
     //TODO complete the parameters of this method
-    public String addImage() {
+    public String addImage(@PathVariable Long sid, @RequestParam("image")MultipartFile multipartFile) throws IOException {
         //TODO complete the body of this method
+
+    Student student = studentService.getStudentBySid(sid);
+
+        studentService.addStudent(student);
+        if(!multipartFile.isEmpty()){
+            String orgFileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            String ext = orgFileName.substring(orgFileName.lastIndexOf("."));
+            String uploadDir = "students-photos/";
+            String fileName = "student-"+student.getSid()+ext;
+            Image img = new Image(multipartFile, fileName, ext, multipartFile.getBytes());
+            Image image = imageService.addImageLa(img);
+            student.setImage(image);
+            studentService.updateStudent(student);
+        }
+
         return "redirect:/students";
     }
 

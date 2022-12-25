@@ -1,6 +1,10 @@
 package de.tekup.studentsabsence.controllers;
 
+import de.tekup.studentsabsence.entities.Group;
+import de.tekup.studentsabsence.entities.GroupSubject;
 import de.tekup.studentsabsence.entities.Subject;
+import de.tekup.studentsabsence.services.AbsenceService;
+import de.tekup.studentsabsence.services.GroupSubjectService;
 import de.tekup.studentsabsence.services.SubjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,6 +25,8 @@ import java.util.List;
 @AllArgsConstructor
 public class SubjectController {
     private final SubjectService subjectService;
+    private final GroupSubjectService groupSubjectService;
+    private final AbsenceService absenceService;
 
     @GetMapping({"", "/"})
     public String index(Model model) {
@@ -69,7 +76,16 @@ public class SubjectController {
 
     @GetMapping("/{id}/show")
     public String show(@PathVariable Long id, Model model) {
+        List<GroupSubject> groupSubjectList = groupSubjectService.getGroupSubjectBySubjectId(id);
+        List<Group> groupList = new ArrayList<>();
+        for (GroupSubject groupSubject : groupSubjectList){
+            groupList.add(groupSubject.getGroup());
+        }
         model.addAttribute("subject", subjectService.getSubjectById(id));
+        model.addAttribute("groupSubjects", groupSubjectService.getGroupSubjectBySubjectId(id));
+        model.addAttribute("absenceService", absenceService);
+        model.addAttribute("groups",groupList);
+        model.addAttribute("absenceService", absenceService);
         return "subjects/show";
     }
 

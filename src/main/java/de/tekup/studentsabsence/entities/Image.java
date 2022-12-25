@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -23,4 +20,14 @@ public class Image {
     private String fileType;
     @Lob
     private byte[] data;
+
+    @OneToOne(mappedBy = "image")
+    Student student;
+
+    public Image(Object o, String fileName, String fileType, byte[] data) {
+        this.id = o.toString();
+        this.fileName = fileName;
+        this.fileType = fileType ;
+        this.data = data;
+    }
 }

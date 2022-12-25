@@ -35,6 +35,59 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header card-header-text card-header-primary">
+                            <div class="card-text">
+                                <h4 class="card-title">GROUPS</h4>
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-hover">
+                                <thead class="text-primary">
+                                <th>Name</th>
+                                <th>Label</th>
+                                <th>Speciality</th>
+                                </thead>
+                                <tbody>
+                                <tr th:each="groupSubject : ${groupSubjects}">
+                                    <td th:text="${groupSubject.group.name}"></td>
+                                    <td th:text="${groupSubject.group.label}"></td>
+                                    <td th:text="${groupSubject.group.speciality}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-text card-header-primary">
+                                <div class="card-text">
+                                    <h4 class="card-title">ABSENCES</h4>
+                                </div>
+                            </div>
+                            <div class="card-body table-responsive">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th class="text-primary">EliminatedStudents\groups</th>
+                                        <th class="text-primary" th:each="groupSubject : ${groupSubjects}" th:text="${groupSubject.group.name}"></th>
+                                    </tr>
+                                    <div th:each="group : ${groups}">
+                                    <tr th:each="student : ${group.students}">
+                                        <td th:text="${student.firstName+' '+student.lastName}"></td>
+                                        <td th:each="groupSubject : ${groupSubjects}"
+                                            th:with="res=${absenceService.hoursCountByStudentAndSubject(student.sid, groupSubject.subject.id)}"
+                                            th:text="${res+'h'}"
+                                            th:classappend="${res > groupSubject.hours * 0.4 ? 'bg-secondary text-light' : '' }"></td>
+                                    </tr>
+                                    </div>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
