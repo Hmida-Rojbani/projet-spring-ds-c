@@ -1,16 +1,11 @@
 package de.tekup.studentsabsence.controllers;
 
 
-import de.tekup.studentsabsence.entities.Absence;
-import de.tekup.studentsabsence.entities.Group;
-import de.tekup.studentsabsence.entities.Student;
+import de.tekup.studentsabsence.entities.*;
 import de.tekup.studentsabsence.enums.LevelEnum;
 import de.tekup.studentsabsence.enums.SpecialityEnum;
 import de.tekup.studentsabsence.holders.GroupSubjectHolder;
-import de.tekup.studentsabsence.services.AbsenceService;
-import de.tekup.studentsabsence.services.GroupService;
-import de.tekup.studentsabsence.services.GroupSubjectService;
-import de.tekup.studentsabsence.services.SubjectService;
+import de.tekup.studentsabsence.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +13,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/groups")
@@ -28,6 +26,9 @@ public class GroupController {
     private final SubjectService subjectService;
     private final GroupSubjectService groupSubjectService;
     private final AbsenceService absenceService;
+    private final StudentService studentService;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+
 
     @GetMapping({"", "/"})
     public String index(Model model) {
@@ -139,8 +140,60 @@ public class GroupController {
 
     @PostMapping("/{id}/add-absences")
     public String addAbsence(@PathVariable long id, @Valid Absence absence, BindingResult bindingResult, @RequestParam(value = "students", required = false) List<Student> students, Model model) {
+        Group group = groupService.getGroupById(id);
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("group", group);
+            model.addAttribute("groupSubjects", groupSubjectService.getSubjectsByGroupId(id));
+            model.addAttribute("students", students);
+            return "groups/add-absences";
+        }
+        for (Student student : students) {
+            absence.setStudent(student);
+            absenceService.addAbsence(absence);
+        }
+
+
         //TODO Complete the body of this method
+
         return "redirect:/groups/"+id+"/add-absences";
     }
+    @GetMapping("/group-stats")
+    public String absencesStat(Model model) {
+        List<Group> groupList = new ArrayList<>(groupService.getAllGroups());
+        Map<String, Map<String, Float>> map = new HashMap<>();
+        for (Group group: groupList) {
+            Map<String,Float> subjectAbsperGrp = new HashMap<>();
+            for (GroupSubject groupSubject : groupSubjectService.getSubjectsByGroupId(group.getId())) {
+                Subject subject = subjectService.getSubjectById(groupSubject.getSubject().getId());
+                float taux = (       absenceService.hoursCountByGroupAndSubject(group.getId(),subject.getId())      /   groupSubject.getHours()         ) * 100 ;
+                BigDecimal bd = new BigDecimal(taux).setScale(2, RoundingMode.HALF_UP);
+                subjectAbsperGrp.put(subject.getName(), bd.floatValue());
+            }
+
+            Map.Entry<String, Float> min = null;
+            Map.Entry<String, Float> max = null;
+            for (Map.Entry<String, Float> entry : subjectAbsperGrp.entrySet()) {
+                if (min == null || min.getValue() > entry.getValue() ) {
+                    min = entry;
+                }
+                if (max == null || max.getValue() < entry.getValue()){
+                    max = entry;
+                }
+            }
+            Map<String, Float> subjectAbsFinal = new LinkedHashMap<>();
+            assert min != null;
+            subjectAbsFinal.put(min.getKey(), min.getValue());
+            subjectAbsFinal.put(max.getKey(), max.getValue());
+            map.put(group.getName() , subjectAbsFinal);
+        }
+
+        model.addAttribute("data", map);
+
+        return "groups/stats";
+    }
+
+
+
 
 }

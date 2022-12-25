@@ -2,19 +2,19 @@ package de.tekup.studentsabsence.entities;
 
 import de.tekup.studentsabsence.enums.LevelEnum;
 import de.tekup.studentsabsence.enums.SpecialityEnum;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Objects;
+
 @Entity
-@Data
-@ToString(exclude = "students")
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Table(name = "_group")
 public class Group {
     @Id
@@ -32,5 +32,15 @@ public class Group {
     //TODO Complete Relations with other entities
 
 
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Student> students;
+
+
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<GroupSubject> groupSubjects;
 
 }

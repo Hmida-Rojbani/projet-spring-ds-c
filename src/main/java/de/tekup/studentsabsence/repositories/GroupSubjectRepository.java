@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GroupSubjectRepository extends CrudRepository<GroupSubject, GroupSubjectKey> {
-    List<GroupSubject> findAllByGroup(Group id);
+    List<GroupSubject> findAllByGroup(Group group);
+
+    List<GroupSubject> findAllBySubjectId(Long id);
+    GroupSubject findGroupSubjectByGroupIdAndSubjectId(Long group_id,Long subject_id);
     ///TODO create a methode to find a groupSubject by Group Id and Subject Id
 }
