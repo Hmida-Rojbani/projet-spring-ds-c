@@ -1,7 +1,9 @@
 package de.tekup.studentsabsence.services.impl;
 
 import de.tekup.studentsabsence.entities.Group;
+import de.tekup.studentsabsence.entities.Subject;
 import de.tekup.studentsabsence.repositories.GroupRepository;
+import de.tekup.studentsabsence.repositories.SubjectRepository;
 import de.tekup.studentsabsence.services.GroupService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,4 +48,6 @@ public class GroupServiceImp implements GroupService {
         groupRepository.delete(group);
         return group;
     }
+
+
 }

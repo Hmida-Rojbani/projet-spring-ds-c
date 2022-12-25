@@ -1,6 +1,7 @@
 package de.tekup.studentsabsence.services;
 
 import de.tekup.studentsabsence.entities.Group;
+import de.tekup.studentsabsence.entities.Subject;
 
 import java.util.List;
 
@@ -14,4 +15,7 @@ public interface GroupService {
     Group updateGroup(Group group);
 
     Group deleteGroup(Long id);
+
+
+
 }

@@ -91,8 +91,11 @@ public class StudentController {
 
     @PostMapping("/{sid}/add-image")
     //TODO complete the parameters of this method
-    public String addImage() {
+    public String addImage(@PathVariable Long sid , MultipartFile image ) throws IOException {
         //TODO complete the body of this method
+        Student s = studentService.getStudentBySid(sid);
+        s.setImage(imageService.addImage(image));
+        studentService.updateStudent(s);
         return "redirect:/students";
     }
 
