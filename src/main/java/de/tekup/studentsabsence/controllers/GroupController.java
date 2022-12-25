@@ -90,9 +90,9 @@ public class GroupController {
         model.addAttribute("students",group.getStudents());
         model.addAttribute("absenceService", absenceService);
 
-        group.getStudents().forEach(student -> {
+        for (Student student : group.getStudents()) {
 
-        });
+        }
 
         return "groups/show";
     }

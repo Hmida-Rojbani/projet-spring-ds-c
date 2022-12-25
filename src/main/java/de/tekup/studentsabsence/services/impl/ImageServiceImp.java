@@ -19,7 +19,7 @@ public class ImageServiceImp implements ImageService {
     //TODO Complete this method
     @Override
     public Image getImage(String id) {
-        Image img  = imageRepository.findImageById(id);
+        Image img  = imageRepository.findById(id).orElseThrow(null);
         return img ;
     }
 

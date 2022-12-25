@@ -2,22 +2,28 @@ package de.tekup.studentsabsence.controllers;
 
 import de.tekup.studentsabsence.entities.Image;
 import de.tekup.studentsabsence.entities.Student;
+import de.tekup.studentsabsence.repositories.StudentRepository;
 import de.tekup.studentsabsence.services.GroupService;
 import de.tekup.studentsabsence.services.ImageService;
+import de.tekup.studentsabsence.services.MailService;
 import de.tekup.studentsabsence.services.StudentService;
 import lombok.AllArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Controller
@@ -27,8 +33,11 @@ public class StudentController {
     private final StudentService studentService;
     private final GroupService groupService;
     private final ImageService imageService;
+    @Autowired
+    private MailService service ;
 
-
+    @Autowired
+    private StudentRepository studentRepository ;
     @GetMapping({"", "/"})
     public String index(Model model) {
         List<Student> students = studentService.getAllStudents();
@@ -41,6 +50,10 @@ public class StudentController {
         model.addAttribute("student", new Student());
         model.addAttribute("groups", groupService.getAllGroups());
         return "students/add";
+    }
+    @GetMapping("/all")
+    public List<Student> getAllStudents(){
+        return studentRepository.findAll();
     }
 
     @PostMapping("/add")
@@ -118,6 +131,25 @@ public class StudentController {
             InputStream inputStream = new ByteArrayInputStream(image.getData());
             IOUtils.copy(inputStream, response.getOutputStream());
         }
+    }
+
+    @PostMapping("/mailing/{id}")
+    public void EmailSenderStudent(@PathVariable Long id, HttpServletRequest request)
+            throws UnsupportedEncodingException, MessagingException {
+        Student student = studentRepository.findById(id).orElseThrow(null);
+        int nbr_absence=  student.getAbsences().size();
+        System.out.println(nbr_absence);
+
+        if (nbr_absence >= 3) {
+            service.sendVerificationEmail(student, getSiteURL(request));
+        }else {
+            System.out.println("Rien a afficher");
+        }
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
     }
 
 }

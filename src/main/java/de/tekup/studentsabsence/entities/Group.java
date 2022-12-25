@@ -10,6 +10,8 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
 @Entity
 @Data
 @ToString(exclude = "students")
@@ -31,12 +33,17 @@ public class Group {
     private SpecialityEnum speciality;
     //TODO Complete Relations with other entities
     // ManyToMany avec subject
-    @ManyToOne
-    private GroupSubject groupSubject;
-    // OnToMany avec Student
-    @OneToMany
-    private List<Student> students;
+    @ManyToMany
+    @JoinTable(
+            name = "course_like",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id"))
+    private List<Subject> subjects;
 
+
+    // OnToMany avec Student
+    @OneToMany(mappedBy = "group")
+    private List<Student> students;
 
 
 }

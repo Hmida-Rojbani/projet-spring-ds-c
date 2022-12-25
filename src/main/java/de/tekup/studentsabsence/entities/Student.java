@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"image","group","absences"})
+@ToString(exclude = {"image", "group", "absences"})
 public class Student implements Serializable {
     //TODO Complete Validations of fields
 
@@ -116,17 +116,14 @@ public class Student implements Serializable {
 
     //TODO Complete Relations with other entities
     @OneToOne
-    private Image image ;
+    private Image image;
 
     //OnToMany avec Absence
     @OneToMany
     private List<Absence> absences;
-
-
-
-
     //ManyToOne avec Group
     @ManyToOne
+    @JoinColumn(name = "group_id")
     private Group group;
 
 
