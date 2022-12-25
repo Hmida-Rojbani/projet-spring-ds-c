@@ -91,8 +91,9 @@ public class StudentController {
 
     @PostMapping("/{sid}/add-image")
     //TODO complete the parameters of this method
-    public String addImage() {
+    public String addImage(@PathVariable Long sid, Model model) {
         //TODO complete the body of this method
+    	  model.addAttribute("student", studentService.getStudentBySid(sid));
         return "redirect:/students";
     }
 
