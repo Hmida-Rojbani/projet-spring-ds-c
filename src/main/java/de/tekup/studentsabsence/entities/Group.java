@@ -29,7 +29,12 @@ public class Group {
     @NotNull(message = "Speciality is required")
     @Enumerated(EnumType.STRING)
     private SpecialityEnum speciality;
-    //TODO Complete Relations with other entities
+    //TODO Complete Relations with other entities , not ok
+    @ManyToMany(mappedBy = "Group")
+    private List<Subject> subjectList;
+
+    @OneToMany(mappedBy = "Group")
+    private List<Student> studentList;
 
 
 

@@ -29,7 +29,15 @@ public class Student implements Serializable {
     private LocalDate dob;
 
     //TODO Complete Relations with other entities
-
-
+    @ManyToOne
+    @JoinColumn(name="name")
+    {
+        private Group group;
+    }
+    @OneToOne
+    @JoinColumn(name="fileName")
+    {
+        private Image image;
+    }
 
 }

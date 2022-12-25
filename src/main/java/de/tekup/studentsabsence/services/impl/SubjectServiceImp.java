@@ -15,12 +15,13 @@ import java.util.NoSuchElementException;
 public class SubjectServiceImp implements SubjectService {
     private final SubjectRepository subjectRepository;
 
-    //TODO Complete this method
+    //TODO Complete this method , ok
     @Override
-    public List<Subject> getAllSubjects() {
-        return null;
+    public List<Subject> getAllSubject() {
+        List<Subject> subjects = new ArrayList<>();
+        subjectRepository.findAll().forEach(subjects::add);
+        return subjects;
     }
-
     @Override
     public Subject getSubjectById(Long id) {
         return subjectRepository.findById(id).
