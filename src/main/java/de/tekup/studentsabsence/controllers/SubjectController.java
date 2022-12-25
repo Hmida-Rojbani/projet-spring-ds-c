@@ -1,6 +1,7 @@
 package de.tekup.studentsabsence.controllers;
 
 import de.tekup.studentsabsence.entities.Subject;
+import de.tekup.studentsabsence.services.AbsenceService;
 import de.tekup.studentsabsence.services.SubjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;

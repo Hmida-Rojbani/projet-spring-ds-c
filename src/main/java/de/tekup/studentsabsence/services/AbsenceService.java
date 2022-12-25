@@ -13,7 +13,8 @@ public interface AbsenceService {
 
     List<Absence> getAllAbsencesByStudentIdAndSubjectId(Long sid, Long id);
 
-    List<Absence> getAllAbsencesByGroupIdAndSubjectId(Long gid, Long id);
+     List<Absence> getAllAbsencesByGroupIdAndSubjectId(Long gid, Long id);
+
 
     Absence getAbsenceById(Long id);
 

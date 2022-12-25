@@ -30,6 +30,10 @@
                                         <tr><td class="text-primary"><strong>Name:</strong></td> <td><span th:text="${subject.name}"></span></td></tr>
                                         </tbody>
                                     </table>
+                                    <label>NBR max abcenses</label>
+                                    <div th:text="${maxabsence.getHours()}"></div>
+                                    <label>NBR min abcenses</label>
+                                    <div th:text="${minabsence.getHours()}"></div>
                                 </div>
                             </div>
                         </div>

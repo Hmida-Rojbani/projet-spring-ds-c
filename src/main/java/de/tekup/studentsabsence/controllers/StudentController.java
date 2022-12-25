@@ -99,6 +99,7 @@ public class StudentController {
     @RequestMapping(value = "/{sid}/display-image")
     public void getStudentPhoto(HttpServletResponse response, @PathVariable("sid") long sid) throws Exception {
         Student student = studentService.getStudentBySid(sid);
+
         Image image = student.getImage();
 
         if(image != null) {
