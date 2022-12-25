@@ -4,6 +4,7 @@ import de.tekup.studentsabsence.entities.Subject;
 import de.tekup.studentsabsence.repositories.SubjectRepository;
 import de.tekup.studentsabsence.services.SubjectService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,12 +14,13 @@ import java.util.NoSuchElementException;
 @Service
 @AllArgsConstructor
 public class SubjectServiceImp implements SubjectService {
+    @Autowired
     private final SubjectRepository subjectRepository;
 
     //TODO Complete this method
     @Override
     public List<Subject> getAllSubjects() {
-        return null;
+        return   subjectRepository.findAll();
     }
 
     @Override
