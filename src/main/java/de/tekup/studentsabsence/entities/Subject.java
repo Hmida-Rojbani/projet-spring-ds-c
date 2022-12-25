@@ -22,4 +22,9 @@ public class Subject implements Serializable {
     @NotBlank(message = "Name is required")
     private String name;
 
+    @OneToOne(mappedBy = "Subject")
+    private List<Absence> absenceList;
+
+    @ManyToMany(mappedBy = "Subject")
+    private List<Group> groupList;
 }

@@ -28,6 +28,16 @@ public class Absence implements Serializable {
     @Positive(message = "Should be positive")
     private float hours;
    //TODO Complete Relations with other entities
+    @OneToOne
+    @JoinColumn(name="name")
+   {
+       private Subject subject;
+   }
+    @ManyToOne
+    @JoinColumn(name="firstName")
+    {
+        private Student student;
+    }
 
 
 }
