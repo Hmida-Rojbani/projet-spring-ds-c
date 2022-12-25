@@ -29,6 +29,12 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
+    public  List<Student> getStudentByGroupId( Long gid ){
+        return studentRepository.getStudentsByGroupId(gid);
+    }
+
+
+    @Override
     public Student addStudent(Student student) {
         return studentRepository.save(student);
 
@@ -37,12 +43,18 @@ public class StudentServiceImp implements StudentService {
     //TODO Complete this method
     @Override
     public Student updateStudent(Student student) {
-        return null;
+        if (!studentRepository.existsById((student.getSid()))){
+            throw new NoSuchElementException("No Student With ID: " + student.getSid());
+
+        }return studentRepository.save(student);
     }
 
     //TODO Complete this method
     @Override
     public Student deleteStudent(Long sid) {
-        return null;
+        Student student = getStudentBySid(sid);
+        studentRepository.delete(student);
+        return student;
     }
+
 }

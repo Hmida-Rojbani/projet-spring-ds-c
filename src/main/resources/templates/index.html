@@ -12,6 +12,45 @@
 <body>
 <div layout:fragment="content">
     <h2>Welcome To TEK-UP Absence Managing System</h2>
+
+    <!--<div class="material-datatables">
+        <table cellspacing="0" class="table table-striped table-no-bordered table-hover" id="datatables"
+               style="width:100%" width="100%">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Group Name</th>
+                <th>Most Absence</th>
+                <th>Less Absence</th>
+                <th>Students eliminate</th>
+
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Group Name</th>
+                <th>Most Absence</th>
+                <th>Less Absence</th>
+                <th>Students eliminate</th>
+
+            </tr>
+            </tfoot>
+            <tbody>
+            <tr th:each="group: ${groups}">
+                <td th:text="${group.id }"></td>
+                <td th:text="${group.Name }"></td>
+                <td th:text="${subjectService.getMostAbsence(group.id)}"></td>
+                <td th:text="${subjectService.getLessAbsence(group.id)}"></td>
+                <td class="text-right">
+                <a class="btn btn-link btn-primary btn-just-icon like" rel="tooltip" title="ENVOIYER MAIL "
+                   th:href="@{/groups/{id}(id=${group.id})}"><i class="material-icons">contact_mail</i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>-->
 </div>
 </body>
 </html>

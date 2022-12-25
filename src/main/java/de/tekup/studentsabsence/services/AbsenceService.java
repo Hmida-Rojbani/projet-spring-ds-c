@@ -1,6 +1,9 @@
 package de.tekup.studentsabsence.services;
 
 import de.tekup.studentsabsence.entities.Absence;
+import de.tekup.studentsabsence.entities.Group;
+import de.tekup.studentsabsence.entities.Student;
+import de.tekup.studentsabsence.entities.Subject;
 
 import java.util.List;
 
@@ -19,6 +22,9 @@ public interface AbsenceService {
 
     Absence addAbsence(Absence absence);
 
+    //TODO My Function
+    Absence addAbsenceByStudentId(Student s, Absence absence);
+
     Absence deleteAbsence(Long id);
 
     float hoursCountByStudent(Long sid);
@@ -28,4 +34,5 @@ public interface AbsenceService {
     float hoursCountByStudentAndSubject(Long sid, Long id);
 
     float countHours(List<Absence> absences);
+
 }
