@@ -35,13 +35,19 @@ public class GroupSubjectServiceImp implements GroupSubjectService {
         Group group = groupService.getGroupById(id);
         return new ArrayList<>(groupSubjectRepository.findAllByGroup(group));
     }
+    @Override
+    public List<GroupSubject> getGroupSubjectsBySubjectId(Long id) {
+        return groupSubjectRepository.findAllBySubjectId(id);
+    }
 
     @Override
     public void deleteSubjectFromGroup(Long gid, Long sid) {
         //TODO find a groupSubject by Group Id and Subject Id
-        GroupSubject groupSubject = null;
+
+        GroupSubject groupSubject = groupSubjectRepository.findGroupSubjectByGroupIdAndSubjectId(gid,sid);
 
         groupSubjectRepository.delete(groupSubject);
     }
+
 
 }

@@ -58,6 +58,8 @@
                                             class="material-icons">edit</i></a>
                                     <a class="btn btn-link btn-danger btn-just-icon remove" rel="tooltip" title="REMOVE SUBJECT"
                                        th:href="@{/subjects/{id}/delete (id=${subject.id})}"><i class="material-icons">delete</i></a>
+                                    <a class="btn btn-link btn-danger btn-just-icon remove" rel="tooltip" title="ELIMINATED STUDENTS"
+                                       th:href="@{/subjects/elimination-stats/{id} (id=${subject.id})}"><i class="fa fa-user-circle-o"></i></a>
                                 </td>
                             </tr>
                             </tbody>
