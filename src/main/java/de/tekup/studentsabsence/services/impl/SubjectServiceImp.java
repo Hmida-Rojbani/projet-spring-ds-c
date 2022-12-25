@@ -1,6 +1,8 @@
 package de.tekup.studentsabsence.services.impl;
 
+import de.tekup.studentsabsence.entities.Student;
 import de.tekup.studentsabsence.entities.Subject;
+import de.tekup.studentsabsence.repositories.AbsenceRepository;
 import de.tekup.studentsabsence.repositories.SubjectRepository;
 import de.tekup.studentsabsence.services.SubjectService;
 import lombok.AllArgsConstructor;
@@ -14,11 +16,14 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 public class SubjectServiceImp implements SubjectService {
     private final SubjectRepository subjectRepository;
+    private final AbsenceRepository absenceRepository;
 
     //TODO Complete this method
     @Override
     public List<Subject> getAllSubjects() {
-        return null;
+        List<Subject> subjects = new ArrayList<>();
+        subjectRepository.findAll().forEach(subjects::add);
+        return subjects;
     }
 
     @Override
@@ -47,6 +52,14 @@ public class SubjectServiceImp implements SubjectService {
         subjectRepository.delete(subject);
         return subject;
     }
+
+	@Override
+	public Subject getMinMax() {
+		absenceR
+		return null;
+	}
+    
+    
 
 
 }

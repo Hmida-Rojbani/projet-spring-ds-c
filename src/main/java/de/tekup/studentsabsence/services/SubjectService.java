@@ -15,6 +15,8 @@ public interface SubjectService {
     Subject deleteSubject(Long id);
 
     Subject updateSubject(Subject subject);
+    
+    Subject getMinMax();
 
 
 }

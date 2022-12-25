@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -31,6 +33,14 @@ public class Group {
     private SpecialityEnum speciality;
     //TODO Complete Relations with other entities
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="groups")
+    private Set <Student> students;
+    
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set <Subject> subjects;
+    
+    
+    
 
 
 }
