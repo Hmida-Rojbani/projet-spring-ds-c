@@ -37,7 +37,15 @@ public class StudentServiceImp implements StudentService {
     //TODO Complete this method
     @Override
     public Student updateStudent(Student student) {
-        return null;
+        Student updatedStudent = studentRepository.findById(student.getSid()).get();
+        updatedStudent.setSid(student.getSid());
+        updatedStudent.setImage(student.getImage());
+        updatedStudent.setDob(student.getDob());
+        updatedStudent.setEmail(student.getEmail());
+        updatedStudent.setPhone(student.getPhone());
+        updatedStudent.setFirstName(student.getFirstName());
+        updatedStudent.setLastName(student.getLastName());
+        return studentRepository.save(updatedStudent);
     }
 
     //TODO Complete this method

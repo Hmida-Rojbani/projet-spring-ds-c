@@ -22,6 +22,7 @@
                 </div>
                 <div class="card-body">
                     <form method="POST" th:action="@{/subjects/add}" th:object="${subject}">
+
                         <div class="form-group col-md-6" th:classappend="${#fields.hasErrors('name') ? 'has-danger' : ''}">
                             <label class="bmd-label-floating" for="name">Name</label>
                             <input class="form-control" id="name" th:field="*{name}" type="text">
