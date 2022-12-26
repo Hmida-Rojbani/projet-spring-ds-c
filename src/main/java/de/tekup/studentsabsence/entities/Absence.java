@@ -3,6 +3,7 @@ package de.tekup.studentsabsence.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = {"subject","student"})
 public class Absence implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +31,11 @@ public class Absence implements Serializable {
     private float hours;
    //TODO Complete Relations with other entities
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "absences_subject")
+    public Subject subject;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "absences_student")
+    public Student student;
 }
