@@ -29,8 +29,70 @@ public class Group {
     @NotNull(message = "Speciality is required")
     @Enumerated(EnumType.STRING)
     private SpecialityEnum speciality;
-    //TODO Complete Relations with other entities
+    //TODO Complete Relations with other entities , not ok
+    @ManyToOne(mappedBy = "Group")
+    private GroupSubject groupSubject;
 
+    @OneToMany(mappedBy = "Group")
+    private List<Student> studentList;
+     
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public LevelEnum getLevel() {
+        return level;
+    }
+
+    public void setLevel(LevelEnum level) {
+        this.level = level;
+    }
+
+    public SpecialityEnum getSpeciality() {
+        return speciality;
+    }
+
+    public void setSpeciality(SpecialityEnum speciality) {
+        this.speciality = speciality;
+    }
+     public List<Student>  getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public GroupSubject getGroupSubject() {
+        return groupSubject;
+    }
+
+    public void setGroupSubject(GroupSubject groupSubject) {
+        this.groupSubject = groupSubject;
+    }
+
+   
+     public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+}
 
 
 }
