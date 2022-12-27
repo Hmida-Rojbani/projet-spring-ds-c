@@ -16,12 +16,11 @@ import java.util.NoSuchElementException;
 public class ImageServiceImp implements ImageService {
     private final ImageRepository imageRepository;
 
-    //TODO Complete this method
+    //TODO Complete this method , ok
     @Override
     public Image getImage(String id) {
-        return null;
-    }
-
+        return imageRepository.findById(id).
+                orElseThrow(() -> new NoSuchElementException("No Image with ID: " + id));
     @Override
     public Image addImage(MultipartFile image) throws IOException {
         String fileName = StringUtils.cleanPath(image.getOriginalFilename());

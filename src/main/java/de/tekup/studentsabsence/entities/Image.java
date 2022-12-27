@@ -23,4 +23,7 @@ public class Image {
     private String fileType;
     @Lob
     private byte[] data;
+
+    @OneToOne(mappedBy = "Image")
+    private List<Student> studentList;
 }
